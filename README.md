@@ -9,4 +9,4 @@
 
  ## Credits
 
- - The icon is made by <a href='https://www.flaticon.com/authors/umeicon'>Umeicon</a> from <a>www.flaticon.com</a>.
+ - The icon is made by <a href='https://www.flaticon.com/authors/umeicon'>Umeicon</a> from <a href='www.flaticon.com'>www.flaticon.com</a>.
