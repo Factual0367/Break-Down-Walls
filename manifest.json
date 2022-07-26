@@ -1,0 +1,38 @@
+{
+
+  "description": "Adds a browser action icon to the toolbar. Click the button to attempt to open link in sci-hub.",
+  "name": "Break Down Walls",
+  "manifest_version": 2,
+  "version": "1.5",
+  "icons": {
+    "48": "graduate-hat.png"
+  },
+
+  "background": {
+    "scripts": [
+      "scihubify.js"
+    ]
+  },
+
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": "graduate-hat.png",
+    "default_title": "Break Down Walls"
+  },
+  "permissions": [
+    "<all_urls>",
+    "tabs",
+    "storage",
+    "activeTab"
+  ],
+  "options_ui": {
+    "page": "preferences.html"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "qwerty@qwerty.com"
+  }
+}
+}
+
