@@ -4,7 +4,7 @@
  
  It is possible to change which mirror is used by the extension by right clicking on the toolbar icon, selecting "Manage extension" and opening "Options" in the page. Currently there are only 4 mirrors, I may add more.
  
- Download the addon file from Releases page, add it to Firefox from Addons page.
+ To use it, download the addon file from Releases page, add it to Firefox from Addons page.
 
  ### To do
 
