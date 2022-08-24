@@ -6,9 +6,30 @@ function getURL() {
         // and use that tab to fill in out title and url
         var tab = tabs[0];
         url = tab.url; 
-        scihubify(url);
+        if (url.includes("amazon")) {
+            libgenify(url)
+            } else {
+            scihubify(url);
         }
-    )};
+    });
+}
+
+function libgenify(url) {
+    var urlList = url.split("/")
+    var isbn = urlList[urlList.length-1]
+    console.log(isbn)
+    var apiUrl = "https://openlibrary.org/isbn/" + isbn + ".json";
+    var data = fetch(apiUrl)
+    .then(res => res.json())  
+    .then((out) => {  
+        title = out["title"];
+        var url = "https://libgen.is/search.php?req=" + title + "&open=0&res=25&view=simple&phrase=1&column=def"
+        browser.tabs.update({ url: url });
+    })  
+    .catch(err => {  
+        throw err  
+    });
+}
 
 function scihubify(currenturl) {
     console.log("Scihubifying.");
@@ -25,8 +46,6 @@ function scihubify(currenturl) {
             var url = mirror + currenturl;
             browser.tabs.update({ url: url });
         }
-
-
     }).catch(err => {
         console.log(err);
 
@@ -90,6 +109,10 @@ browser.menus.create({
 
 browser.menus.onClicked.addListener(async function (info, tab) {
 if (info.menuItemId == "download") {
-    article_link = info.linkUrl;
-    constructLink(article_link)
+    link = info.linkUrl;
+    if (link.includes('amazon')) {
+        libgenify(link)
+    } else {
+        constructLink(link)
+    }
 }});   
