@@ -3,7 +3,7 @@
   "description": "Adds a browser action icon to the toolbar. Click the button to attempt to open link in sci-hub.",
   "name": "Break Down the Walls",
   "manifest_version": 2,
-  "version": "1.0",
+  "version": "1.1",
   "icons": {
     "48": "graduate-hat.png"
   },
