@@ -1,7 +1,7 @@
 
 ***
 <sub>
-<img  src="https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/graduate-hat.png" height="100" width="auto">
+<p align='center'><img  src="https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/graduate-hat.png" height="100" width="auto"></p>
 </sub>
 <h1 align="center">Break Down Walls</h1>
 
