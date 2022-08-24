@@ -11,7 +11,9 @@
 
 <p align='center' style='font-weight:bold'>Downloading papers made easier.</p>
 
-This extension adds a button to toolbar which, when clicked, will open the current link one of sci-hub's mirrors. You can also right click on a link and click 'Download PDF' which will attempt to download the PDF automatically for you. It is possible to change which mirror is used by the extension by right clicking on the toolbar icon, selecting "Manage extension" and opening "Options" in the page. Currently there are only 4 mirrors, I may add more if people need it.
+This extension allows easier access to information. It adds a button to toolbar. If you are viewing a scientific article, when you press the toolbar button it will attempt to open the article you are viewing in one of Sci-hub mirrors. If you are viewing a book on **Amazon**, it will search the book for you on Libgen and show you the search page. You can also right click on a link (either an article link or an Amazon link to a book) and click 'Download PDF' which will download the PDF for you if the link is of an article or it will open Libgen search results for you if the link is of a book on Amazon. 
+
+It is possible to change which Sci-hub mirror is used by the extension by right clicking on the toolbar icon, selecting "Manage extension" and opening "Options" in the page. Currently there are only 4 mirrors, I may add more if people need it.
 
 ### To do
 
