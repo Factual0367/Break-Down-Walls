@@ -5,7 +5,7 @@
 <img  src="https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/graduate-hat.png" height="100" width="auto">
 </sub>
 Break Down Walls</h1>
-***
+
 
 <p align="center">
 <a href="https://addons.mozilla.org/en-US/firefox/addon/break-down-walls/"><img src="https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png" style='border-radius:15px' alt="Get Break Down Walls"></a>
