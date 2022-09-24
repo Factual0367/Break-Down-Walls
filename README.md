@@ -15,9 +15,10 @@ This extension allows easier access to information. It adds a button to toolbar.
 
 It is possible to change which Sci-hub mirror is used by the extension by right clicking on the toolbar icon, selecting "Manage extension" and opening "Options" in the page. Currently there are only 4 mirrors, I may add more if people need it.
 
+Chromium based browser support is not planned, I do not have the time to support two manifest versions. I'll accept pull requests if someone implements this for Chrome though!
+
 ### To do
 
-- Support Chromium based browsers
 - Better error handling
 
 ### Credits
