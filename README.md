@@ -25,7 +25,4 @@ Chromium based browser support is not planned, I do not have the time to support
 
  - The icon is made by <a href='https://www.flaticon.com/authors/umeicon'>Umeicon</a> from <a>www.flaticon.com</a>.
 
-### Support my work! 
-
-<script src="https://liberapay.com/Atomic-Punk/widgets/button.js"></script>
 <noscript><a href="https://liberapay.com/Atomic-Punk/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
