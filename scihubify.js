@@ -16,8 +16,11 @@ function getURL() {
 
 function libgenify(url) {
     var urlList = url.split("/")
-    var isbn = urlList[urlList.length-1]
-    console.log(isbn)
+    if (url.includes('keywords')) {
+        var isbn = urlList[urlList.length-2]
+    } else {
+        var isbn = urlList[urlList.length-1]
+    }
     var apiUrl = "https://openlibrary.org/isbn/" + isbn + ".json";
     var data = fetch(apiUrl)
     .then(res => res.json())  
@@ -32,7 +35,6 @@ function libgenify(url) {
 }
 
 function scihubify(currenturl) {
-    console.log("Scihubifying.");
     // get the preferred mirror set by user 
     // default is sci-hub.se
     const p = Promise.resolve(browser.storage.sync.get('mirror'))
@@ -73,7 +75,6 @@ async function downloadPDF(scihubLink) {
             var doc = parser.parseFromString(html, "text/html");
             var saveBtn = doc.getElementsByTagName('button')[0].getAttribute('onclick').slice(17,-1)
             browser.tabs.create({url:'http://'+saveBtn})        
-            console.log(saveBtn);
         } catch {
             browser.notifications.create({
             type: "basic",
