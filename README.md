@@ -1,5 +1,3 @@
-
-***
 <sub>
 <p align='center'><img  src="https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/graduate-hat.png" height="100" width="auto"></p>
 </sub>
