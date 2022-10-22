@@ -39,6 +39,7 @@ function scihubify(currenturl) {
     // default is sci-hub.se
     const p = Promise.resolve(browser.storage.sync.get('mirror'))
     p.then(value => {
+        console.log(value.mirror)
         if (value.mirror == undefined) {
             var mirror = 'https://sci-hub.se/'
             var url = mirror + currenturl;
