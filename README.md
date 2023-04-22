@@ -9,7 +9,7 @@
 
 This extension allows easier access to information. It adds a button to toolbar. If you are viewing a scientific article, when you press the toolbar button it will attempt to open the article you are viewing in one of Sci-hub mirrors. If you are viewing a book on **Amazon**, it will search the book for you on Libgen and show you the search page. You can also right click on a link (either an article link or an Amazon link to a book) and click 'Download PDF' which will download the PDF for you if the link is of an article or it will open Libgen search results for you if the link is of a book on Amazon. 
 
-It is possible to change which Sci-hub mirror is used by the extension by right clicking on the toolbar icon, selecting "Manage extension" and opening "Options" in the page. Currently there are only 4 mirrors, I may add more if people need it.
+It is possible to change which Sci-hub mirror is used by the extension by right clicking on the toolbar icon, selecting "Manage extension" and opening "Options" in the page. Currently there are only 4 mirrors, I will add more if people need it.
 
 Chromium based browser support is not planned, I do not have the time to support two manifest versions. I'll accept pull requests if someone implements this for Chrome though!
 
@@ -20,5 +20,3 @@ Chromium based browser support is not planned, I do not have the time to support
 ### Credits
 
  - The icon is made by <a href='https://www.flaticon.com/authors/umeicon'>Umeicon</a> from <a>www.flaticon.com</a>.
-
-<noscript><a href="https://liberapay.com/onurhan/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
