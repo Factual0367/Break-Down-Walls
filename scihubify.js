@@ -25,7 +25,15 @@ function getURL() {
 
             goodreadify(isbn)
         });
-      } 
+      } else if (url.includes("books.google")) {
+        browser.tabs.executeScript(tab.id, { code: googleBooksScript })
+            .then(results => {
+                // get the ISBN from the results
+                var isbn = results[0];
+                console.log(isbn)
+                googleify(isbn)
+            });
+      }
       else if (url.includes("amazon")) {
         libgenify(url);
       } 
@@ -40,6 +48,22 @@ function getURL() {
 const libgenify = async (url) => {
     const urlList = url.split("/")
     const isbn = url.includes('keywords') ? urlList[urlList.length-2] : urlList[urlList.length-1];
+    const apiUrl = `https://openlibrary.org/isbn/${isbn}.json`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const title = data["title"];
+        const searchURL = `https://libgen.is/search.php?req=${title}&open=0&res=25&view=simple&phrase=1&column=def`;
+
+        updateTabURL(searchURL);
+    } catch (error) {
+        throw error;
+    }
+}
+
+// handles Google Books
+const googleify = async (isbn) => {
     const apiUrl = `https://openlibrary.org/isbn/${isbn}.json`;
 
     try {
@@ -91,12 +115,12 @@ browser.menus.create({
 browser.menus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === "download") {
         const link = info.linkUrl;
-        if (link.includes('goodreads.com')) {
+        if (link.includes('goodreads.com') || link.includes('books.google')) {
             browser.notifications.create({
                 type: "basic",
                 iconUrl: browser.extension.getURL("graduate-hat.png"),
                 title: "Download Not Available",
-                message: "This option does not work for Goodreads. Open the page and use the menubar icon.",
+                message: "This option does not work for Goodreads and Google Books. Open the page and use the menubar icon.",
             });
         } else if (link.includes('amazon')) {
             await libgenify(link);
@@ -157,3 +181,27 @@ var goodreadsScript = `
 
     isbn;
 `;
+
+// content script to get isbn from Google Books
+var googleBooksScript = `
+    const table = document.getElementById('metadata_content_table');
+
+    const dataObject = {};
+
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        
+        const cells = row.getElementsByTagName('td');
+        
+        if (cells.length >= 2) {
+            const key = cells[0].textContent.trim(); // Get the text content of the first cell (key)
+            const value = cells[1].textContent.trim(); // Get the text content of the second cell (value)
+            dataObject[key] = value;
+        }
+    };
+
+    const ISBN = dataObject['ISBN'].split(', ')[0];
+    ISBN;
+`

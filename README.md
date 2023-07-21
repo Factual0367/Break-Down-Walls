@@ -11,11 +11,11 @@ This extension is a comprehensive tool that makes it simpler for users to access
 
 If you are viewing a scientific article and you press the toolbar button, the extension will attempt to open the article in one of the Sci-hub mirrors, making it possible to bypass any paywalls. This tool offers users the ability to change which Sci-hub mirror is used by navigating to the extension options. Currently, there are four available mirrors, with plans to add more based on user needs.
 
-For book readers, if you are viewing a book on Amazon or Goodreads, pressing the toolbar button will automatically search for the book on Libgen and present the search results to you. It streamlines the process of finding books available for free download.
+For book readers, if you are viewing a book on Amazon, Google Books or Goodreads, pressing the toolbar button will automatically search for the book on Libgen and present the search results to you. It streamlines the process of finding books available for free download.
 
 The extension includes a 'Download PDF' option in the context menu, which is accessible by right-clicking on a link. If the link is to a scientific article, the extension will download the PDF for you. If the link is to a book on Amazon, the extension will open Libgen search results for you.
 
-Note that the right-click 'Download PDF' option does not work with Goodreads. If you want to find a book from Goodreads on Libgen, please open the book page and use the toolbar button.
+Note that the right-click 'Download PDF' option does not work with Goodreads and Google Books. If you want to find a book from Goodreads or Google Books on Libgen, please open the book page and use the toolbar button.
 
 Chromium based browser support is not planned, I do not have the time to support two manifest versions. I'll accept pull requests if someone implements this for Chrome though!
 
