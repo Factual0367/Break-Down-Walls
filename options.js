@@ -1,22 +1,17 @@
-function saveOptions(e) {
+const saveOptions = (e) => {
   e.preventDefault();
-  browser.storage.sync.set({
-    mirror: document.querySelector("input[name='mirror']:checked").value,
-  });
+  const mirrorValue = document.querySelector("input[name='mirror']:checked").value;
+  browser.storage.sync.set({ mirror: mirrorValue });
 }
 
-function restoreOptions() {
-  function setCurrentChoice(result) {
-    document.querySelector("input[name='mirror']:checked").value =
-      result.mirror || "https://sci-hub.se/";
-  }
-
-  function onError(error) {
+const restoreOptions = async () => {
+  try {
+    const result = await browser.storage.sync.get("mirror");
+    const currentChoice = result.mirror || "https://sci-hub.se/";
+    document.querySelector("input[name='mirror']:checked").value = currentChoice;
+  } catch (error) {
     console.log(`Error: ${error}`);
   }
-
-  let getting = browser.storage.sync.get("mirror");
-  getting.then(setCurrentChoice, onError);
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);

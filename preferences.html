@@ -4,65 +4,69 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Preferences</title>
 </head>
 <style>
     body {
         background: #171717;
-        height: 100%;
+        height: 100vh;
         margin: 0;
-        color: #fff
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    form {
+        background: #1f1f1f;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     }
 
     label {
         display: flex;
-        margin: 5px;
-        padding: 8px;
-        font-family: sans-serif;
-        font-weight: 400;
-        font-size: 15px;
+        align-items: center;
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    input[type="radio"] {
+        margin-right: 0.5rem;
     }
 
     button {
-        margin: 5px;
-        padding: 5px;
-        width: 10%;
-        text-align: center;
         background-color: rgb(59, 108, 172);
         border: none;
         color: white;
         font-weight: 600;
+        padding: 0.5rem 1rem;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
     }
 
-    button:active {
-        background-color: rgb(77, 140, 221);;
+    button:hover, button:focus {
+        background-color: rgb(77, 140, 221);
         box-shadow: 0 2px #666;
-        transform: translateY(4px);
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-    }
-
-    p {
-        margin: 5px;
-        font-weight: 500;
-        font-family: sans-serif;
-        font-size: 16px !important;
     }
 </style>
 
 <body>
     <form>
-        <label>
-            <p>Please select which Sci-hub mirror to use:</p>
-        </label>
+        <p>Please select which Sci-hub mirror to use:</p>
         <label><input type="radio" name="mirror" value="https://sci-hub.se/">sci-hub.se</label>
         <label><input type="radio" name="mirror" value="http://sci-hub.wf/">sci-hub.wf</label>
         <label><input type="radio" name="mirror" value="http://sci-hub.ru/">sci-hub.ru</label>
         <label><input type="radio" name="mirror" value="http://sci-hub.st/">sci-hub.st</label>
-        <label><button id='submit' type="submit">Save</button></label>
+        <button id='submit' type="submit">Save</button>
     </form>
 
     <script src="options.js"></script>
