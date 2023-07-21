@@ -7,15 +7,17 @@
 <p align="center">
 <a href="https://addons.mozilla.org/en-US/firefox/addon/break-down-walls/"><img src="https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png" style='border-radius:15px' alt="Get Break Down Walls"></a>
 
-This extension allows easier access to information. It adds a button to toolbar. If you are viewing a scientific article, when you press the toolbar button it will attempt to open the article you are viewing in one of Sci-hub mirrors. If you are viewing a book on **Amazon**, it will search the book for you on Libgen and show you the search page. You can also right click on a link (either an article link or an Amazon link to a book) and click 'Download PDF' which will download the PDF for you if the link is of an article or it will open Libgen search results for you if the link is of a book on Amazon. 
+This extension is a comprehensive tool that makes it simpler for users to access and download scientific articles and books from Amazon or Goodreads. The extension adds a button to the toolbar, which serves different purposes based on the page you are viewing.
 
-It is possible to change which Sci-hub mirror is used by the extension by right clicking on the toolbar icon, selecting "Manage extension" and opening "Options" in the page. Currently there are only 4 mirrors, I will add more if people need it.
+If you are viewing a scientific article and you press the toolbar button, the extension will attempt to open the article in one of the Sci-hub mirrors, making it possible to bypass any paywalls. This tool offers users the ability to change which Sci-hub mirror is used by navigating to the extension options. Currently, there are four available mirrors, with plans to add more based on user needs.
+
+For book readers, if you are viewing a book on Amazon or Goodreads, pressing the toolbar button will automatically search for the book on Libgen and present the search results to you. It streamlines the process of finding books available for free download.
+
+The extension includes a 'Download PDF' option in the context menu, which is accessible by right-clicking on a link. If the link is to a scientific article, the extension will download the PDF for you. If the link is to a book on Amazon, the extension will open Libgen search results for you.
+
+Note that the right-click 'Download PDF' option does not work with Goodreads. If you want to find a book from Goodreads on Libgen, please open the book page and use the toolbar button.
 
 Chromium based browser support is not planned, I do not have the time to support two manifest versions. I'll accept pull requests if someone implements this for Chrome though!
-
-### To do
-
-- Better error handling
 
 ### Credits
 
