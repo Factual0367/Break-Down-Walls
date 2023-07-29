@@ -101,7 +101,8 @@ const scihubify = async (url) => {
     const fullURL = `${mirror}${doi}`;
     openNewTab(fullURL);
   } catch {
-    showNotification("Could not extract DOI from the URL.");
+    showNotification("Could not extract DOI or ISBN from the URL.");
+    return null
   }
 };
 
