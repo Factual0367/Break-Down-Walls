@@ -94,9 +94,14 @@ async function openLibraryHandler(properURL) {
   try {
     const response = await fetch(properURL[0]);
     const data = await response.json();
-    const title = data["title"];
+    console.log(data);
+    const title = data["full_title"];
+    if (Boolean(title) == false) {
+      showNotification('Book not found.')
+      exit()
+    }
     const searchURL = `https://libgen.is/search.php?req=${title}&open=0&res=25&view=simple&phrase=1&column=def`;
-    return searchURL || null;
+    return searchURL;
   } catch {
     showNotification('Could not acquire data from Open Library.');
     return null;
