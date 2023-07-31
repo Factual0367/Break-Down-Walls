@@ -9,7 +9,7 @@
 
 This extension is a comprehensive tool that makes it simpler for users to access and download scientific articles and books from Amazon or Goodreads. The extension adds a button to the toolbar, which serves different purposes based on the page you are viewing.
 
-If you are viewing a scientific article and you press the toolbar button, the extension will attempt to open the article in one of the Sci-hub mirrors, making it possible to bypass any paywalls. This tool offers users the ability to change which Sci-hub mirror is used by navigating to the extension options. Currently, there are four available mirrors, with plans to add more based on user needs.
+If you are viewing a scientific article and you press the toolbar button, the extension will attempt to open the article in one of the Sci-hub mirrors or on Nexus if Sci-hub does not have the article. This tool offers users the ability to change which Sci-hub mirror is used by navigating to the extension options. Currently, there are four available mirrors, with plans to add more based on user needs.
 
 For book readers, if you are viewing a book on Amazon, Google Books or Goodreads, pressing the toolbar button will automatically search for the book on Libgen and present the search results to you. It streamlines the process of finding books available for free download.
 
