@@ -6,9 +6,15 @@ const doiRegex = /10\.\d{4,9}\/[-._;()/:A-Z0-9]+/gi;
 const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 
 const getMirror = async () => {
-  const { mirror } = await browser.storage.sync.get('mirror');
-  return mirror || 'https://sci-hub.se/';
+  try {
+    const { scihubMirror, libgenMirror } = await browser.storage.sync.get(['scihubMirror', 'libgenMirror']);
+    return [scihubMirror || 'https://sci-hub.se/', libgenMirror || 'https://libgen.rs/'];
+  } catch (error) {
+    console.log(`Error: ${error}`);
+    return ['https://sci-hub.se/', 'https://libgen.rs/'];
+  }
 };
+
 
 // opens a new browser tab with the given URL
 const openNewTab = (url) => {
@@ -35,6 +41,7 @@ function getActiveTabUrl() {
   });
 }
 
+// utility to get ISBN from page source
 function findLongestString(arr) {
   let longestString = "";
   for (const element of arr) {
@@ -47,30 +54,32 @@ function findLongestString(arr) {
 
 // script to return proper URLs 
 const handlePDFUrl = async (data, isDoi) => {
-  const scihubMirror = await getMirror();
+  const [scihubMirror, libgenMirror] = await getMirror();
   if (isDoi) {
     const nexusURL = `https://standard--template--construct-org.ipns.dweb.link/#/nexus_science/doi:${data}`;
     const scihubURL = `${scihubMirror}${data}`;
     return [nexusURL, scihubURL];
   } else {
     const openLibraryApiUrl = `https://openlibrary.org/isbn/${data}.json`;
-    return [openLibraryApiUrl, null];
+    return [openLibraryApiUrl];
   }
 };
 
 // script to get ISBN from Goodreads or Google Books
 const getISBNFromTab = async (tabId, script) => {
   try {
-    const result = await browser.tabs.executeScript(tabId, { code: script });
-    const resultArr = result[0];
-    const longest = findLongestString(resultArr);
-    const isbn = longest.replace(/\D/g, '');
+    let result = await browser.tabs.executeScript(tabId, { code: script });
+    let resultArr = result[0];
+    let longest = findLongestString(resultArr);
+    isbn = longest.replace(/\D/g, '');
+    console.log(isbn)
     return isbn || false;
   } catch (error) {
     console.error("Error executing content script:", error);
     return false;
   }
 };
+
 
 const getISBNFromURL = async (url) => {
   if (amazonRegex.test(url)) {
@@ -90,23 +99,37 @@ const getDOIFromURL = async (url) => {
   }
 };
 
+// get book title from open library
 async function openLibraryHandler(properURL) {
   try {
     const response = await fetch(properURL[0]);
-    const data = await response.json();
-    console.log(data);
-    const title = data["full_title"];
-    if (Boolean(title) == false) {
-      showNotification('Book not found.')
-      exit()
+
+    if (!response.ok) {
+      throw new Error('OpenLibrary response was not ok.');
     }
-    const searchURL = `https://libgen.is/search.php?req=${title}&open=0&res=25&view=simple&phrase=1&column=def`;
+
+    const data = await response.json();
+    let title = data["full_title"];
+    let subtitle = data['subtitle'];
+
+    title = title || (subtitle ? `${data['title']} ${subtitle}` : data['title']);
+
+    if (!title) {
+      showNotification('Book not found.');
+      return null; 
+    }
+
+    const [scihubMirror, libgenMirror] = await getMirror();
+    const searchURL = `${libgenMirror}search.php?req=${title}&open=0&res=25&view=simple&phrase=1&column=def`;
     return searchURL;
-  } catch {
+  } catch (error) {
+    console.log(error);
     showNotification('Could not acquire data from Open Library.');
-    return null;
+    return null; 
   }
 }
+
+
 
 async function urlHandler(url, tabID) {
   if (url.includes("goodreads.com")) {
@@ -116,7 +139,9 @@ async function urlHandler(url, tabID) {
       return null;
     }
     const properURL = await handlePDFUrl(isbn, false);
+    console.log(properURL);
     const finalURL = await openLibraryHandler(properURL);
+    console.log(finalURL)
     return finalURL || null;
   } else if (url.includes("books.google")) {
     const isbn = await getISBNFromTab(tabID, googleBooksScript);
@@ -167,7 +192,7 @@ async function run(url, tabID) {
       openNewTab(nexusURL);
     }
   } else {
-    // It returned a single value, which means it's a goodreads, Google Books, or Amazon URL
+    // it returned a single value, which means it's a goodreads, Google Books, or Amazon URL
     const bookURL = result;
     if (bookURL) {
       openNewTab(bookURL);
@@ -178,7 +203,7 @@ async function run(url, tabID) {
 async function main() {
   const [urlTemp, tabID] = await getActiveTabUrl();
   if (urlTemp) {
-    const url = urlTemp.replace('/full', '').replace('/text', ''); // Edge cases
+    const url = urlTemp.replace('/full', '').replace('/text', ''); // edge cases
     run(url, tabID);
   }
 }
@@ -187,15 +212,15 @@ async function main() {
 
 // content script to get ISBN from Goodreads
 const goodreadsContentScript = `
-  const buttons = Array.from(document.querySelectorAll('span'));
-  const buttonToClick = buttons.find(button => button.innerText === 'Book details & editions');
+  buttons = Array.from(document.querySelectorAll('span'));
+  buttonToClick = buttons.find(button => button.innerText === 'Book details & editions');
 
   if (buttonToClick) {
     buttonToClick.click();
   }
 
-  const elements = document.querySelectorAll('.DescListItem');
-  let isbn = null;
+  elements = document.querySelectorAll('.DescListItem');
+  isbn = null;
 
   elements.forEach(element => {
     if (element.firstElementChild && element.firstElementChild.innerText === "ISBN") {
@@ -211,23 +236,23 @@ const goodreadsContentScript = `
 
 // content script to get ISBN from Google Books
 const googleBooksScript = `
-  const table = document.getElementById('metadata_content_table');
-  const dataObject = {};
+  table = document.getElementById('metadata_content_table');
+  dataObject = {};
 
-  const rows = table.getElementsByTagName('tr');
+  rows = table.getElementsByTagName('tr');
 
   for (let i = 1; i < rows.length; i++) {
-    const row = rows[i];
-    const cells = row.getElementsByTagName('td');
+    row = rows[i];
+    cells = row.getElementsByTagName('td');
 
     if (cells.length >= 2) {
-      const key = cells[0].textContent.trim(); // Get the text content of the first cell (key)
-      const value = cells[1].textContent.trim(); // Get the text content of the second cell (value)
+      key = cells[0].textContent.trim(); // Get the text content of the first cell (key)
+      value = cells[1].textContent.trim(); // Get the text content of the second cell (value)
       dataObject[key] = value;
     }
   }
 
-  const ISBN = dataObject['ISBN']?.split(', ');
+  ISBN = dataObject['ISBN']?.split(', ');
   ISBN;
 `;
 

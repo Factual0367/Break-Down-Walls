@@ -1,14 +1,27 @@
 const saveOptions = (e) => {
   e.preventDefault();
-  const mirrorValue = document.querySelector("input[name='mirror']:checked").value;
-  browser.storage.sync.set({ mirror: mirrorValue });
+  const scihubMirrorValue = document.querySelector("input[name='scihub-mirror']:checked").value;
+  browser.storage.sync.set({ scihubMirror: scihubMirrorValue });
+
+  const libgenMirrorValue = document.querySelector("input[name='libgen-mirror']:checked").value;
+  browser.storage.sync.set({ libgenMirror: libgenMirrorValue });
 }
 
 const restoreOptions = async () => {
   try {
-    const result = await browser.storage.sync.get("mirror");
-    const currentChoice = result.mirror || "https://sci-hub.se/";
-    document.querySelector("input[name='mirror']:checked").value = currentChoice;
+    const { scihubMirror } = await browser.storage.sync.get('scihubMirror');
+    if (scihubMirror) {
+      document.querySelector(`input[name='scihub-mirror'][value='${scihubMirror}']`).checked = true;
+    }
+  } catch (error) {
+    console.log(`Error: ${error}`);
+  }
+
+  try {
+    const { libgenMirror } = await browser.storage.sync.get('libgenMirror');
+    if (libgenMirror) {
+      document.querySelector(`input[name='libgen-mirror'][value='${libgenMirror}']`).checked = true;
+    }
   } catch (error) {
     console.log(`Error: ${error}`);
   }

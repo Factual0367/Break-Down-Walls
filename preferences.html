@@ -23,6 +23,7 @@
         padding: 2rem;
         border-radius: 10px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
     }
 
     label {
@@ -57,15 +58,25 @@
         background-color: rgb(77, 140, 221);
         box-shadow: 0 2px #666;
     }
+
+    .top-padding {
+        padding-top: 3%;
+    }
 </style>
 
 <body>
     <form>
         <p>Please select which Sci-hub mirror to use:</p>
-        <label><input type="radio" name="mirror" value="https://sci-hub.se/">sci-hub.se</label>
-        <label><input type="radio" name="mirror" value="http://sci-hub.wf/">sci-hub.wf</label>
-        <label><input type="radio" name="mirror" value="http://sci-hub.ru/">sci-hub.ru</label>
-        <label><input type="radio" name="mirror" value="http://sci-hub.st/">sci-hub.st</label>
+        <label><input type="radio" name="scihub-mirror" checked value="https://sci-hub.se/">sci-hub.se</label>
+        <label><input type="radio" name="scihub-mirror" value="http://sci-hub.wf/">sci-hub.wf</label>
+        <label><input type="radio" name="scihub-mirror" value="http://sci-hub.ru/">sci-hub.ru</label>
+        <label><input type="radio" name="scihub-mirror" value="http://sci-hub.st/">sci-hub.st</label>
+
+        <p class="top-padding">Please select which Library Genesis mirror to use:</p>
+        <label><input type="radio" name="libgen-mirror" checked value="https://libgen.is/">libgen.is</label>
+        <label><input type="radio" name="libgen-mirror" value="http://libgen.rs/">libgen.rs</label>
+        <label><input type="radio" name="libgen-mirror" value="http://libgen.rocks'">libgen.rocks</label>
+        <label><input type="radio" name="libgen-mirror" value="http://libgen.lc/">libgen.lc</label>
         <button id='submit' type="submit">Save</button>
     </form>
 
