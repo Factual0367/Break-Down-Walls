@@ -129,7 +129,23 @@ async function openLibraryHandler(properURL) {
   }
 }
 
-
+async function fetchSciHubDOI(url) {
+  const sciHubURL = `https://sci-hub.se/${url}`;
+  const response = await fetch(sciHubURL);
+  if (response.ok) {
+    const text = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    const doiElement = doc.getElementById('doi');
+    if (doiElement) {
+      const doiText = doiElement.textContent.trim();
+      if (doiText) {
+        return doiText;
+      }
+    }
+  }
+  return null;
+}
 
 async function urlHandler(url, tabID) {
   if (url.includes("goodreads.com")) {
@@ -141,7 +157,7 @@ async function urlHandler(url, tabID) {
     const properURL = await handlePDFUrl(isbn, false);
     console.log(properURL);
     const finalURL = await openLibraryHandler(properURL);
-    console.log(finalURL)
+    console.log(finalURL);
     return finalURL || null;
   } else if (url.includes("books.google")) {
     const isbn = await getISBNFromTab(tabID, googleBooksScript);
@@ -159,8 +175,14 @@ async function urlHandler(url, tabID) {
       const [nexusURL, scihubURL] = await handlePDFUrl(doi, true);
       return [nexusURL, scihubURL] || [null, null];
     } else {
-      showNotification('Could not find DOI or ISBN.');
-      return null;
+      const scihubDOI = await fetchSciHubDOI(url);
+      if (scihubDOI) {
+        const [nexusURL, scihubURL] = await handlePDFUrl(scihubDOI, true);
+        return [nexusURL, scihubURL] || [null, null];
+      } else {
+        showNotification('Could not find DOI or ISBN.');
+        return null;
+      }
     }
   }
 }
@@ -172,12 +194,21 @@ async function checkScihub(scihubURL) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
     const saveBtn = doc.querySelector('button[onclick^="location.href=\'"]');
-    return Boolean(saveBtn);
+    if (saveBtn) {
+      const saveBtnHref = saveBtn.getAttribute("onclick").match(/'([^']+)'/)[1];
+      const saveBtnResponse = await fetch(saveBtnHref);
+      if (saveBtnResponse.status === 404 && saveBtnResponse.statusText === "Not Found") {
+        // Sci-Hub returned a 404 Not Found page, try Nexus instead
+        return true;
+      }
+    }
+    return false;
   } catch (error) {
-    console.error("Error checking Sci-hub:", error);
+    console.error("Error checking Sci-Hub:", error);
     return false;
   }
 }
+
 
 async function run(url, tabID) {
   const result = await urlHandler(url, tabID);
