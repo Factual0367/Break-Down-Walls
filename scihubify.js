@@ -195,11 +195,15 @@ async function checkScihub(scihubURL) {
     const doc = parser.parseFromString(html, "text/html");
     const saveBtn = doc.querySelector('button[onclick^="location.href=\'"]');
     if (saveBtn) {
-      const saveBtnHref = saveBtn.getAttribute("onclick").match(/'([^']+)'/)[1];
+      var saveBtnHref = saveBtn.getAttribute("onclick").match(/'([^']+)'/)[1];
+      saveBtnHref = 'https://sci-hub.se' + saveBtnHref
+      console.log(saveBtnHref)
       const saveBtnResponse = await fetch(saveBtnHref);
-      if (saveBtnResponse.status === 404 && saveBtnResponse.statusText === "Not Found") {
+      if (saveBtnResponse.status === 404) {
         // Sci-Hub returned a 404 Not Found page, try Nexus instead
-        return true;
+        return false;
+      } else {
+        return true
       }
     }
     return false;
