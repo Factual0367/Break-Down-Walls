@@ -25,4 +25,4 @@ Chromium based browser support is not planned, I do not have the time to support
 
 ### Credits
 
- - The icon is made by <a href='https://www.flaticon.com/authors/umeicon'>Umeicon</a> from <a>www.flaticon.com</a>.
+ - The icon is made by <a href='https://www.flaticon.com/authors/umeicon'>Umeicon</a> from <a href='https://www.flaticon.com/'>www.flaticon.com</a>.
