@@ -20,7 +20,8 @@ It is also possible to change which Sci-hub and Library Genesis mirrors are used
 Chromium based browser support is not planned, I do not have the time to support two manifest versions. I'll accept pull requests if someone implements this for Chrome though!
 
 ### To Do
-- Implement Anna's Library support
+- Implement Anna's Archive support
+- Redesign options page
 
 ### Credits
 
