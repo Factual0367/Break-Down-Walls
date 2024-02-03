@@ -21,15 +21,16 @@
     "tabs",
     "storage",
     "activeTab",
-    "menus",
     "notifications"
   ],
+  "optional_permissions": ["menus"],
   "options_ui": {
     "page": "preferences.html"
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "onurhanak@protonmail.com"
+      "id": "onurhanak@protonmail.com",
+      "strict_min_version": "48.0"
     }
   }
 }

@@ -72,7 +72,6 @@ const getISBNFromTab = async (tabId, script) => {
     let resultArr = result[0];
     let longest = findLongestString(resultArr);
     isbn = longest.replace(/\D/g, '');
-    console.log(isbn)
     return isbn || false;
   } catch (error) {
     console.error("Error executing content script:", error);
@@ -155,9 +154,7 @@ async function urlHandler(url, tabID) {
       return null;
     }
     const properURL = await handlePDFUrl(isbn, false);
-    console.log(properURL);
     const finalURL = await openLibraryHandler(properURL);
-    console.log(finalURL);
     return finalURL || null;
   } else if (url.includes("books.google")) {
     const isbn = await getISBNFromTab(tabID, googleBooksScript);
@@ -194,10 +191,13 @@ async function checkScihub(scihubURL) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
     const saveBtn = doc.querySelector('button[onclick^="location.href=\'"]');
-    if (saveBtn) {
+    const captchaBtn = doc.querySelector('input#answer');
+    if (captchaBtn) {
+      // scihub asks for captcha
+      return true;
+    } else if (saveBtn) {
       var saveBtnHref = saveBtn.getAttribute("onclick").match(/'([^']+)'/)[1];
       saveBtnHref = 'https://sci-hub.se' + saveBtnHref
-      console.log(saveBtnHref)
       const saveBtnResponse = await fetch(saveBtnHref);
       if (saveBtnResponse.status === 404) {
         // Sci-Hub returned a 404 Not Found page, try Nexus instead
@@ -294,23 +294,28 @@ const googleBooksScript = `
 // LISTENERS AND CONTEXT MENU
 
 // Menu
-browser.menus.create({
-  id: "download",
-  title: "Download PDF",
-  contexts: ["link"],
-});
-
-// listener for the menu item click
-browser.menus.onClicked.addListener(async (info) => {
-  if (info.menuItemId === "download") {
-    const link = info.linkUrl;
-    if (link.includes('goodreads.com') || link.includes('books.google')) {
-      showNotification("Download Not Available: Open the page and use the menubar icon.");
-    } else {
-      run(link, null)
+// Firefox Desktop
+if (browser.menus) {
+  browser.menus.create({
+    id: "download",
+    title: "Download PDF",
+    contexts: ["link"],
+  });
+  
+  // listener for the menu item click
+  browser.menus.onClicked.addListener(async (info) => {
+    if (info.menuItemId === "download") {
+      const link = info.linkUrl;
+      if (link.includes('goodreads.com') || link.includes('books.google')) {
+        showNotification("Download Not Available: Open the page and use the menubar icon.");
+      } else {
+        run(link, null)
+      }
     }
-  }
-});
+  });
+} else {
+  // pass
+}
 
 // listener for when the browser-action is clicked
 browser.browserAction.onClicked.addListener(main);
