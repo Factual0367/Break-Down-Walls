@@ -7,13 +7,24 @@ const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 
 const getMirror = async () => {
   try {
-    const { scihubMirror, libgenMirror } = await browser.storage.sync.get(['scihubMirror', 'libgenMirror']);
-    return [scihubMirror || 'https://sci-hub.se/', libgenMirror || 'https://libgen.rs/'];
+    const storage = await browser.storage.sync.get(["annasArchive", "scihubMirror", "libgenMirror"]);
+    const { scihubMirror, libgenMirror } = storage;
+
+    // convert str to bool
+    const useAnnasArchive = storage.annasArchive === "true";
+
+    console.log(`Anna's Archive setting: ${useAnnasArchive}`);
+    if (useAnnasArchive) {
+      return [scihubMirror || "https://sci-hub.ru", "https://annas-archive.org/"];
+    } else {
+      return [scihubMirror || 'https://sci-hub.ru/', libgenMirror || 'https://libgen.rs/'];
+    }
   } catch (error) {
     console.log(`Error: ${error}`);
     return ['https://sci-hub.se/', 'https://libgen.rs/'];
   }
 };
+
 
 
 // opens a new browser tab with the given URL
@@ -115,18 +126,28 @@ async function openLibraryHandler(properURL) {
 
     if (!title) {
       showNotification('Book not found.');
-      return null; 
+      return null;
     }
 
-    const [scihubMirror, libgenMirror] = await getMirror();
-    const searchURL = `${libgenMirror}search.php?req=${title}&open=0&res=25&view=simple&phrase=1&column=def`;
+    const [scihubMirror, secondaryMirror] = await getMirror();
+
+    let searchURL;
+    if (secondaryMirror.includes("annas-archive.org")) {
+      // Format for Anna's Archive
+      searchURL = `https://annas-archive.org/search?q=${encodeURIComponent(title)}`;
+    } else {
+      // Format for Library Genesis
+      searchURL = `${secondaryMirror}search.php?req=${encodeURIComponent(title)}&open=0&res=25&view=simple&phrase=1&column=def`;
+    }
+
     return searchURL;
   } catch (error) {
     console.log(error);
     showNotification('Could not acquire data from Open Library.');
-    return null; 
+    return null;
   }
 }
+
 
 async function fetchSciHubDOI(url) {
   const sciHubURL = `https://sci-hub.se/${url}`;
@@ -302,7 +323,7 @@ if (browser.menus) {
     title: "Download PDF",
     contexts: ["link"],
   });
-  
+
   // listener for the menu item click
   browser.menus.onClicked.addListener(async (info) => {
     if (info.menuItemId === "download") {
@@ -323,22 +344,22 @@ browser.browserAction.onClicked.addListener(main);
 
 // check updates
 function checkForUpdates() {
-  // Version URL
+  // version URL
   const versionUrl = 'https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/VERSION';
 
-  // Fetch 
+  // fetch 
   fetch(versionUrl)
-      .then(response => response.text())
-      .then(latestVersion => {
-          const currentVersion = browser.runtime.getManifest().version;
+    .then(response => response.text())
+    .then(latestVersion => {
+      const currentVersion = browser.runtime.getManifest().version;
 
-          if (currentVersion !== latestVersion) {
-              showNotification('A new version of the extension is available. Please update to the latest version.');
-          }
-      })
-      .catch(error => console.error('Error checking for extension updates:', error));
+      if (currentVersion !== latestVersion) {
+        showNotification('A new version of the extension is available. Please update to the latest version.');
+      }
+    })
+    .catch(error => console.error('Error checking for extension updates:', error));
 }
 
 checkForUpdates();
 
-setInterval(checkForUpdates, 86400000); // Check for new version everyday
+setInterval(checkForUpdates, 86400000); // check for new version everyday

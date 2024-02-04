@@ -1,11 +1,17 @@
 const saveOptions = (e) => {
   e.preventDefault();
+
   const scihubMirrorValue = document.querySelector("input[name='scihub-mirror']:checked").value;
   browser.storage.sync.set({ scihubMirror: scihubMirrorValue });
 
   const libgenMirrorValue = document.querySelector("input[name='libgen-mirror']:checked").value;
   browser.storage.sync.set({ libgenMirror: libgenMirrorValue });
+
+  const annasArchiveCheckbox = document.querySelector("input[name='annas-archive']");
+  const useAnnasArchiveValue = annasArchiveCheckbox.checked ? "true" : "false";
+  browser.storage.sync.set({ annasArchive: useAnnasArchiveValue });
 }
+
 
 const restoreOptions = async () => {
   try {
@@ -30,14 +36,14 @@ const restoreOptions = async () => {
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
 
-document.getElementById('settingsForm').addEventListener('submit', function(event) {
+document.getElementById('settingsForm').addEventListener('submit', function (event) {
   event.preventDefault();
 
   var notification = document.querySelector('.notification');
   notification.style.display = 'block';
 
-  setTimeout(function() {
-      notification.style.display = 'none';
+  setTimeout(function () {
+    notification.style.display = 'none';
   }, 2000);
 
 });
