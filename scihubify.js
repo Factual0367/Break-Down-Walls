@@ -8,7 +8,6 @@ const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 const getMirror = async () => {
   try {
     const { scihubMirror, libgenMirror } = await browser.storage.sync.get(['scihubMirror', 'libgenMirror']);
-    console.log(scihubMirror);
     return [scihubMirror || 'https://sci-hub.se/', libgenMirror || 'https://libgen.rs/'];
   } catch (error) {
     console.log(`Error: ${error}`);
@@ -322,3 +321,24 @@ if (browser.menus) {
 // listener for when the browser-action is clicked
 browser.browserAction.onClicked.addListener(main);
 
+// check updates
+function checkForUpdates() {
+  // Version URL
+  const versionUrl = 'https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/VERSION';
+
+  // Fetch 
+  fetch(versionUrl)
+      .then(response => response.text())
+      .then(latestVersion => {
+          const currentVersion = browser.runtime.getManifest().version;
+
+          if (currentVersion !== latestVersion) {
+              showNotification('A new version of the extension is available. Please update to the latest version.');
+          }
+      })
+      .catch(error => console.error('Error checking for extension updates:', error));
+}
+
+checkForUpdates();
+
+setInterval(checkForUpdates, 86400000); // Check for new version everyday
