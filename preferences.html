@@ -1,85 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Preferences</title>
 </head>
-<style>
-    body {
-        background: #171717;
-        height: 100vh;
-        margin: 0;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 
-    form {
-        background: #1f1f1f;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-        width: 100%;
-    }
+<body class="bg-gray-800 flex justify-center items-center h-screen">
+    <form id="settingsForm" class="bg-gray-700 text-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <p class="text-lg font-semibold mb-4">Please select which Sci-hub mirror to use:</p>
+        <div class="mb-4">
+            <label class="flex items-center mb-2">
+                <input type="radio" name="scihub-mirror" value="https://sci-hub.se/" class="form-radio text-blue-600">
+                <span class="ml-2">sci-hub.se</span>
+            </label>
+            <label class="flex items-center mb-2">
+                <input type="radio" name="scihub-mirror" checked value="http://sci-hub.ru/"
+                    class="form-radio text-blue-600">
+                <span class="ml-2">sci-hub.ru</span>
+            </label>
+            <label class="flex items-center mb-2">
+                <input type="radio" name="scihub-mirror" value="http://sci-hub.st/" class="form-radio text-blue-600">
+                <span class="ml-2">sci-hub.st</span>
+            </label>
+        </div>
 
-    label {
-        display: flex;
-        align-items: center;
-        font-family: 'Segoe UI', sans-serif;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
+        <p class="text-lg font-semibold mb-4 mt-6">Please select which Library Genesis mirror to use:</p>
+        <div class="mb-6">
+            <label class="flex items-center mb-2">
+                <input type="radio" name="libgen-mirror" checked value="https://libgen.is/"
+                    class="form-radio text-blue-600">
+                <span class="ml-2">libgen.is</span>
+            </label>
+            <label class="flex items-center mb-2">
+                <input type="radio" name="libgen-mirror" value="http://libgen.rs/" class="form-radio text-blue-600">
+                <span class="ml-2">libgen.rs</span>
+            </label>
+            <label class="flex items-center mb-2">
+                <input type="radio" name="libgen-mirror" value="http://libgen.rocks/" class="form-radio text-blue-600">
+                <span class="ml-2">libgen.rocks</span>
+            </label>
+            <label class="flex items-center mb-2">
+                <input type="radio" name="libgen-mirror" value="http://libgen.lc/" class="form-radio text-blue-600">
+                <span class="ml-2">libgen.lc</span>
+            </label>
+        </div>
 
-    p {
-        margin-bottom: 1rem;
-        font-weight: 600;
-    }
-
-    input[type="radio"] {
-        margin-right: 0.5rem;
-    }
-
-    button {
-        background-color: rgb(59, 108, 172);
-        border: none;
-        color: white;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        margin-top: 1rem;
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-
-    button:hover, button:focus {
-        background-color: rgb(77, 140, 221);
-        box-shadow: 0 2px #666;
-    }
-
-    .top-padding {
-        padding-top: 3%;
-    }
-</style>
-
-<body>
-    <form>
-        <p>Please select which Sci-hub mirror to use:</p>
-        <label><input type="radio" name="scihub-mirror" checked value="https://sci-hub.se/">sci-hub.se</label>
-        <label><input type="radio" name="scihub-mirror" value="http://sci-hub.wf/">sci-hub.wf</label>
-        <label><input type="radio" name="scihub-mirror" value="http://sci-hub.ru/">sci-hub.ru</label>
-        <label><input type="radio" name="scihub-mirror" value="http://sci-hub.st/">sci-hub.st</label>
-
-        <p class="top-padding">Please select which Library Genesis mirror to use:</p>
-        <label><input type="radio" name="libgen-mirror" checked value="https://libgen.is/">libgen.is</label>
-        <label><input type="radio" name="libgen-mirror" value="http://libgen.rs/">libgen.rs</label>
-        <label><input type="radio" name="libgen-mirror" value="http://libgen.rocks/">libgen.rocks</label>
-        <label><input type="radio" name="libgen-mirror" value="http://libgen.lc/">libgen.lc</label>
-        <button id='submit' type="submit">Save</button>
+        <button type="submit"
+            class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save</button>
+        <div class="notification mt-4 p-2 text-sm text-green-500 hidden">Settings updated!</div>
     </form>
-
     <script src="options.js"></script>
 </body>
 

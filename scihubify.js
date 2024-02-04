@@ -8,6 +8,7 @@ const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 const getMirror = async () => {
   try {
     const { scihubMirror, libgenMirror } = await browser.storage.sync.get(['scihubMirror', 'libgenMirror']);
+    console.log(scihubMirror);
     return [scihubMirror || 'https://sci-hub.se/', libgenMirror || 'https://libgen.rs/'];
   } catch (error) {
     console.log(`Error: ${error}`);
@@ -197,7 +198,7 @@ async function checkScihub(scihubURL) {
       return true;
     } else if (saveBtn) {
       var saveBtnHref = saveBtn.getAttribute("onclick").match(/'([^']+)'/)[1];
-      saveBtnHref = 'https://sci-hub.se' + saveBtnHref
+      saveBtnHref = 'https://sci-hub.ru' + saveBtnHref
       const saveBtnResponse = await fetch(saveBtnHref);
       if (saveBtnResponse.status === 404) {
         // Sci-Hub returned a 404 Not Found page, try Nexus instead
@@ -219,6 +220,7 @@ async function run(url, tabID) {
   if (Array.isArray(result)) {
     // It returned an array, which means it's a DOI URL and has two values
     const [nexusURL, scihubURL] = result;
+
     const isAvailableFromScihub = await checkScihub(scihubURL);
     if (isAvailableFromScihub) {
       openNewTab(scihubURL);
