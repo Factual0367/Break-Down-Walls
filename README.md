@@ -1,5 +1,3 @@
-[![Stargazers][stars-shield]][stars-url]
-
 <sub>
 <p align='center'><img  src="https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/graduate-hat.png" height="100" width="auto"></p>
 </sub>
@@ -56,5 +54,3 @@ You can use the extension with scientific articles and books on Amazon, Goodread
 [gbookstutorial]: assets/GBooksLibgen.webp
 [scihubtutorial]: assets/Scihub.webp
 [annasarchivetutorial]: assets/AnnasArchive.webp
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
