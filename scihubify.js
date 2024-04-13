@@ -67,7 +67,7 @@ function findLongestString(arr) {
 const handlePDFUrl = async (data, isDoi) => {
   const [scihubMirror, libgenMirror] = await getMirror();
   if (isDoi) {
-    const nexusURL = `https://standard--template--construct-org.ipns.dweb.link/#/nexus_science/doi:${data}`;
+    const nexusURL = `https://libstc.cc/#/?q=${data}&p=1&ds=false`;
     const scihubURL = `${scihubMirror}${data}`;
     return [nexusURL, scihubURL];
   } else {
