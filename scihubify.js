@@ -385,6 +385,6 @@ function checkForUpdates() {
     );
 }
 
-checkForUpdates();
+// checkForUpdates();
 
-setInterval(checkForUpdates, 86400000); // check for new version everyday
+// setInterval(checkForUpdates, 86400000); // check for new version everyday
