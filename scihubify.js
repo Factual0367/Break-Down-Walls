@@ -17,7 +17,6 @@ const getMirror = async () => {
     // convert str to bool
     const useAnnasArchive = storage.annasArchive === "true";
 
-    console.log(`Anna's Archive setting: ${useAnnasArchive}`);
     if (useAnnasArchive) {
       return [
         scihubMirror || "https://sci-hub.ru",
@@ -36,8 +35,14 @@ const getMirror = async () => {
 };
 
 // opens a new browser tab with the given URL
-const openNewTab = (url) => {
-  browser.tabs.create({ url });
+const openNewTab = async (url) => {
+  const storage = await browser.storage.sync.get(["openInNewTab"]);
+  var openInNewTab = storage.openInNewTab == "true";
+  if (openInNewTab) {
+    browser.tabs.create({ url });
+  } else {
+    browser.tabs.update({ url });
+  }
 };
 
 // shows a notification with the given message
