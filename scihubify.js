@@ -7,7 +7,11 @@ const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 
 const getMirror = async () => {
   try {
-    const storage = await browser.storage.sync.get(["annasArchive", "scihubMirror", "libgenMirror"]);
+    const storage = await browser.storage.sync.get([
+      "annasArchive",
+      "scihubMirror",
+      "libgenMirror",
+    ]);
     const { scihubMirror, libgenMirror } = storage;
 
     // convert str to bool
@@ -15,17 +19,21 @@ const getMirror = async () => {
 
     console.log(`Anna's Archive setting: ${useAnnasArchive}`);
     if (useAnnasArchive) {
-      return [scihubMirror || "https://sci-hub.ru", "https://annas-archive.org/"];
+      return [
+        scihubMirror || "https://sci-hub.ru",
+        "https://annas-archive.org/",
+      ];
     } else {
-      return [scihubMirror || 'https://sci-hub.ru/', libgenMirror || 'https://libgen.rs/'];
+      return [
+        scihubMirror || "https://sci-hub.ru/",
+        libgenMirror || "https://libgen.rs/",
+      ];
     }
   } catch (error) {
     console.log(`Error: ${error}`);
-    return ['https://sci-hub.se/', 'https://libgen.rs/'];
+    return ["https://sci-hub.se/", "https://libgen.rs/"];
   }
 };
-
-
 
 // opens a new browser tab with the given URL
 const openNewTab = (url) => {
@@ -63,7 +71,7 @@ function findLongestString(arr) {
   return longestString;
 }
 
-// script to return proper URLs 
+// script to return proper URLs
 const handlePDFUrl = async (data, isDoi) => {
   const [scihubMirror, libgenMirror] = await getMirror();
   if (isDoi) {
@@ -82,7 +90,7 @@ const getISBNFromTab = async (tabId, script) => {
     let result = await browser.tabs.executeScript(tabId, { code: script });
     let resultArr = result[0];
     let longest = findLongestString(resultArr);
-    isbn = longest.replace(/\D/g, '');
+    isbn = longest.replace(/\D/g, "");
     return isbn || false;
   } catch (error) {
     console.error("Error executing content script:", error);
@@ -90,10 +98,9 @@ const getISBNFromTab = async (tabId, script) => {
   }
 };
 
-
 const getISBNFromURL = async (url) => {
   if (amazonRegex.test(url)) {
-    const isbn = url.match(amazonRegex)[0].replace('dp/', '');
+    const isbn = url.match(amazonRegex)[0].replace("dp/", "");
     return isbn || null;
   } else {
     return null;
@@ -115,17 +122,18 @@ async function openLibraryHandler(properURL) {
     const response = await fetch(properURL[0]);
 
     if (!response.ok) {
-      throw new Error('OpenLibrary response was not ok.');
+      throw new Error("OpenLibrary response was not ok.");
     }
 
     const data = await response.json();
     let title = data["full_title"];
-    let subtitle = data['subtitle'];
+    let subtitle = data["subtitle"];
 
-    title = title || (subtitle ? `${data['title']} ${subtitle}` : data['title']);
+    title =
+      title || (subtitle ? `${data["title"]} ${subtitle}` : data["title"]);
 
     if (!title) {
-      showNotification('Book not found.');
+      showNotification("Book not found.");
       return null;
     }
 
@@ -143,11 +151,10 @@ async function openLibraryHandler(properURL) {
     return searchURL;
   } catch (error) {
     console.log(error);
-    showNotification('Could not acquire data from Open Library.');
+    showNotification("Could not acquire data from Open Library.");
     return null;
   }
 }
-
 
 async function fetchSciHubDOI(url) {
   const sciHubURL = `https://sci-hub.se/${url}`;
@@ -155,8 +162,8 @@ async function fetchSciHubDOI(url) {
   if (response.ok) {
     const text = await response.text();
     const parser = new DOMParser();
-    const doc = parser.parseFromString(text, 'text/html');
-    const doiElement = doc.getElementById('doi');
+    const doc = parser.parseFromString(text, "text/html");
+    const doiElement = doc.getElementById("doi");
     if (doiElement) {
       const doiText = doiElement.textContent.trim();
       if (doiText) {
@@ -171,7 +178,7 @@ async function urlHandler(url, tabID) {
   if (url.includes("goodreads.com")) {
     const isbn = await getISBNFromTab(tabID, goodreadsContentScript);
     if (!isbn) {
-      showNotification('Could not extract ISBN from page.');
+      showNotification("Could not extract ISBN from page.");
       return null;
     }
     const properURL = await handlePDFUrl(isbn, false);
@@ -198,7 +205,7 @@ async function urlHandler(url, tabID) {
         const [nexusURL, scihubURL] = await handlePDFUrl(scihubDOI, true);
         return [nexusURL, scihubURL] || [null, null];
       } else {
-        showNotification('Could not find DOI or ISBN.');
+        showNotification("Could not find DOI or ISBN.");
         return null;
       }
     }
@@ -212,19 +219,19 @@ async function checkScihub(scihubURL) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
     const saveBtn = doc.querySelector('button[onclick^="location.href=\'"]');
-    const captchaBtn = doc.querySelector('input#answer');
+    const captchaBtn = doc.querySelector("input#answer");
     if (captchaBtn) {
       // scihub asks for captcha
       return true;
     } else if (saveBtn) {
       var saveBtnHref = saveBtn.getAttribute("onclick").match(/'([^']+)'/)[1];
-      saveBtnHref = 'https://sci-hub.ru' + saveBtnHref
+      saveBtnHref = "https://sci-hub.ru" + saveBtnHref;
       const saveBtnResponse = await fetch(saveBtnHref);
       if (saveBtnResponse.status === 404) {
         // Sci-Hub returned a 404 Not Found page, try Nexus instead
         return false;
       } else {
-        return true
+        return true;
       }
     }
     return false;
@@ -233,7 +240,6 @@ async function checkScihub(scihubURL) {
     return false;
   }
 }
-
 
 async function run(url, tabID) {
   const result = await urlHandler(url, tabID);
@@ -245,7 +251,7 @@ async function run(url, tabID) {
     if (isAvailableFromScihub) {
       openNewTab(scihubURL);
     } else {
-      showNotification('PDF not available on Sci-hub, trying Nexus.');
+      showNotification("PDF not available on Sci-hub, trying Nexus.");
       openNewTab(nexusURL);
     }
   } else {
@@ -260,7 +266,7 @@ async function run(url, tabID) {
 async function main() {
   const [urlTemp, tabID] = await getActiveTabUrl();
   if (urlTemp) {
-    const url = urlTemp.replace('/full', '').replace('/text', ''); // edge cases
+    const url = urlTemp.replace("/full", "").replace("/text", ""); // edge cases
     run(url, tabID);
   }
 }
@@ -328,10 +334,12 @@ if (browser.menus) {
   browser.menus.onClicked.addListener(async (info) => {
     if (info.menuItemId === "download") {
       const link = info.linkUrl;
-      if (link.includes('goodreads.com') || link.includes('books.google')) {
-        showNotification("Download Not Available: Open the page and use the menubar icon.");
+      if (link.includes("goodreads.com") || link.includes("books.google")) {
+        showNotification(
+          "Download Not Available: Open the page and use the menubar icon.",
+        );
       } else {
-        run(link, null)
+        run(link, null);
       }
     }
   });
@@ -342,22 +350,34 @@ if (browser.menus) {
 // listener for when the browser-action is clicked
 browser.browserAction.onClicked.addListener(main);
 
+// listener for keyboard shortcut
+browser.commands.onCommand.addListener((command) => {
+  if (command === "trigger-action") {
+    main();
+  }
+});
+
 // check updates
 function checkForUpdates() {
   // version URL
-  const versionUrl = 'https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/VERSION';
+  const versionUrl =
+    "https://raw.githubusercontent.com/onurhanak/Break-Down-Walls/main/VERSION";
 
-  // fetch 
+  // fetch
   fetch(versionUrl)
-    .then(response => response.text())
-    .then(latestVersion => {
+    .then((response) => response.text())
+    .then((latestVersion) => {
       const currentVersion = browser.runtime.getManifest().version;
 
       if (currentVersion !== latestVersion) {
-        showNotification('A new version of the extension is available. Please update to the latest version.');
+        showNotification(
+          "A new version of the extension is available. Please update to the latest version.",
+        );
       }
     })
-    .catch(error => console.error('Error checking for extension updates:', error));
+    .catch((error) =>
+      console.error("Error checking for extension updates:", error),
+    );
 }
 
 checkForUpdates();
