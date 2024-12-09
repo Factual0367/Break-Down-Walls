@@ -13,13 +13,15 @@
 
 This extension streamlines accessing and downloading scientific articles and books. Here's a breakdown of its features:
 
-**Scientific Articles:** Clicking the toolbar button on an article page will open the article via a Sci-hub mirror or Nexus if Sci-hub doesn’t have it.
+**Scientific Articles:** Clicking the toolbar button or using the keyboard shortcut on an article page will open the article via a Sci-hub mirror or Nexus if Sci-hub doesn’t have it.
 
-**Books on Amazon, Google Books, or Goodreads:** Pressing the toolbar button searches for the book on Libgen or Anna's Archive, showing the search results.
+**Books on Amazon, Google Books, or Goodreads:** Pressing the toolbar button or using the keyboard shortcut searches for the book on Libgen or Anna's Archive, showing the search results.
 
 **Download PDF Feature:** Right-clicking on a scientific article link allows you to download the PDF. For book links on supported sites, it opens Libgen search results. This doesn’t work with Goodreads and Google Books – use the toolbar button instead.
 
 **Customizable Mirror Options:** Users can switch between Sci-hub and Library Genesis mirrors or opt for Anna's Archive instead of Libgen via the options page.
+
+**Changing the Keyboard Shortcut:** Navigate to <a href="about:addons">about:addons</a> and click on the gear icon to select "Manage Extension Shortcuts". 
 
 Chromium based browser support is not planned, I do not have the time to support two manifest versions. I'll accept pull requests if someone implements this for Chrome though!
 
