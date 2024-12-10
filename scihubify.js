@@ -34,14 +34,18 @@ const getMirror = async () => {
   }
 };
 
-// opens a new browser tab with the given URL
 const openNewTab = async (url) => {
-  const storage = await browser.storage.sync.get(["openInNewTab"]);
-  var openInNewTab = storage.openInNewTab == "true";
-  if (openInNewTab) {
-    browser.tabs.create({ url });
-  } else {
+  const storage = await browser.storage.sync.get(["openInTheCurrentTab"]);
+  var openInTheCurrentTab = storage.openInTheCurrentTab == "true";
+
+  if (openInTheCurrentTab === undefined) {
+    openInTheCurrentTab = false; // def value
+  }
+
+  if (openInTheCurrentTab) {
     browser.tabs.update({ url });
+  } else {
+    browser.tabs.create({ url });
   }
 };
 

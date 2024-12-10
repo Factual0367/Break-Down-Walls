@@ -37,7 +37,11 @@
   },
   "browser_specific_settings": {
     "gecko": {
+      "strict_min_version": "102.0",
       "id": "onurhanak@protonmail.com"
+    },
+    "gecko_android": {
+      "strict_min_version": "113.0"
     }
   }
 }
